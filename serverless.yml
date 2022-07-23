@@ -1,0 +1,29 @@
+service: aws-node-http-api-project
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: ap-southeast-1
+
+functions:
+  hello:
+    handler: src/hello.handler
+    events:
+      - httpApi:
+          path: /
+          method: get
+
+resources: 
+  Resources: 
+    TodoTable: 
+      Type: AWS::DynamoDB::Table
+      Properties: 
+        TableName: TodoTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions: 
+          - AttributeName: id #Unique ID for each record 
+            AttributeType: S #String
+        KeySchema: 
+          - AttributeName: id
+            KeyType: HASH 
