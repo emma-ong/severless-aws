@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/emma-ong/severless-aws#readme",
   "dependencies": {
+    "@middy/core": "^3.1.0",
+    "@middy/http-json-body-parser": "^3.1.0",
     "aws-sdk": "^2.1181.0",
     "uuid": "^8.3.2"
   }

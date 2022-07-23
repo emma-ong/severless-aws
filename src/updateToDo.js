@@ -1,5 +1,7 @@
 const { v4 } = require("uuid") //versions created different types of id
 const AWS = require("aws-sdk") //access to DynamoDB
+const middy = require("@middy/core")
+const httpJsonBodyParser = require("@middy/http-json-body-parser")
 
 const updateToDo = async (event) => {
 
@@ -8,7 +10,7 @@ const updateToDo = async (event) => {
   const dynamodb = new AWS.DynamoDB.DocumentClient()
 
   //Defines record variables to be placed in table 
-  const { completed } = JSON.parse(event.body) //requires JSON.parse to convert stringified to object 
+  const { completed } = event.body
   const { id } = event.pathParameters
 
   await dynamodb.update({
@@ -31,5 +33,5 @@ const updateToDo = async (event) => {
 };
 
 module.exports = {
-  handler: updateToDo
+  handler: middy(updateToDo).use(httpJsonBodyParser())
 }
