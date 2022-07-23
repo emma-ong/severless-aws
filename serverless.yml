@@ -5,14 +5,38 @@ provider:
   name: aws
   runtime: nodejs14.x
   region: ap-southeast-1
-
+  iamRoleStatements:
+    - Effect: Allow 
+      Action: 
+        - dynamodb:* 
+      Resource:
+        - arn:aws:dynamodb:ap-southeast-1:648347801613:table/TodoTable
 functions:
-  hello:
-    handler: src/hello.handler
+  addToDo:
+    handler: src/addToDo.handler
     events:
       - httpApi:
           path: /
+          method: post
+  fetchToDos:
+    handler: src/fetchToDos.handler
+    events:
+      - httpApi:
+          path: /todos
           method: get
+  fetchToDo:
+    handler: src/fetchToDo.handler
+    events:
+      - httpApi:
+          path: /todo/{id}
+          method: get
+  updateToDo:
+    handler: src/updateToDo.handler
+    events:
+      - httpApi:
+          path: /todo/{id}
+          method: put
+
 
 resources: 
   Resources: 
@@ -22,8 +46,8 @@ resources:
         TableName: TodoTable
         BillingMode: PAY_PER_REQUEST
         AttributeDefinitions: 
-          - AttributeName: id #Unique ID for each record 
-            AttributeType: S #String
+          - AttributeName: id 
+            AttributeType: S 
         KeySchema: 
           - AttributeName: id
             KeyType: HASH 
